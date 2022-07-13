@@ -1,0 +1,19 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch("DB_USERNAME") %>
+  password: <%= ENV.fetch("DB_PASSWORD") %>
+  socket: /tmp/mysql.sock
+
+development:
+  <<: *default
+  database: factorial_api_dev
+
+test:
+  <<: *default
+  database: factorial_api_test
+
+production:
+  <<: *default
+  database: factorial_api_prod
