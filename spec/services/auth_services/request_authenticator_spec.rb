@@ -3,9 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe AuthServices::RequestAuthenticator do
-  # Invalid request subject
-  let(:invalid_request_obj) { described_class.new({}) }
-
   # Test Suite for RequestAuthenticator#call
   describe '#call' do
     context 'when valid request' do
