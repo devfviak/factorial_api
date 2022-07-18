@@ -8,18 +8,4 @@ module RequestHelper
   def expired_token_generator(user_id)
     ::JsonWebToken.encode({ user_id: }, ttl: -1.second)
   end
-
-  def valid_headers
-    {
-      'Authorization' => token_generator(user.id),
-      'Content-Type' => 'application/json'
-    }
-  end
-
-  def invalid_headers
-    {
-      'Authorization' => nil,
-      'Content-Type' => 'application/json'
-    }
-  end
 end
