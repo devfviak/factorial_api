@@ -18,7 +18,9 @@ module AuthServices
       user_id = decoded_payload[:user_id]
 
       User.find(user_id)
-    rescue JWT::DecodeError, ActiveRecord::RecordNotFound
+    rescue JWT::ExpiredSignature
+      raise ExpiredToken
+    rescue JWT::DecodeError, ActiveRecord::RecordNotFound => e
       raise InvalidToken
     end
 
