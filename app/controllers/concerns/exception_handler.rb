@@ -15,7 +15,7 @@ module ExceptionHandler
     end
 
     rescue_from InvalidToken, with: :unauthorized_response
-    rescue_From ExpiredToken, with: :unauthorized_response
+    rescue_from ExpiredToken, with: :unauthorized_response
 
     private
 
