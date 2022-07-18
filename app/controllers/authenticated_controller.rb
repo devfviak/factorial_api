@@ -8,6 +8,6 @@ class AuthenticatedController < ApplicationController
   private
 
   def authenticate_request
-    @current_user = AuthServices::RequestAuthenticator.call(req.headers)
+    @current_user = AuthServices::RequestAuthenticator.call(request.headers)
   end
 end
