@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_secure_password
 
   EMAIL_REGEXP = URI::MailTo::EMAIL_REGEXP
-  PHONE_E164_REGEXP = Regexp.new('\A\+?\d{10,14}\z')
+  PHONE_E164_REGEXP = Regexp.new('\A\+[1-9]\d{1,14}\z')
 
   validates :first_name, :last_name, :email, :phone, :password_digest, presence: true
   validates :first_name, :last_name, length: { in: 0..50 }
