@@ -42,8 +42,8 @@ RSpec.describe AuthServices::RequestAuthenticator do
 
       let(:user) { create(:user) }
 
-      it 'throws Exceptions::InvalidToken' do
-        expect { request_authenticator.call }.to raise_exception(Exceptions::InvalidToken)
+      it 'throws Exceptions::ExpiredToken' do
+        expect { request_authenticator.call }.to raise_exception(Exceptions::ExpiredToken)
       end
     end
   end
