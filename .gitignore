@@ -31,3 +31,6 @@
 # Ignore env and database settings
 .env
 /config/database.yml
+
+# Ignore tests coverage report
+coverage
