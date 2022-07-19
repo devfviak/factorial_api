@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include Auditable
+
   has_secure_password
 
   EMAIL_REGEXP = URI::MailTo::EMAIL_REGEXP
