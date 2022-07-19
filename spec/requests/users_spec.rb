@@ -7,59 +7,152 @@ RSpec.describe 'Users API', type: :request do
   let(:valid_attributes) do
     attributes_for(:user, password_confirmation: user.password)
   end
-  let(:return_url) { 'http://google.com' }
 
-  let(:headers) { valid_headers.except('Authorization') }
+  let(:return_url) { 'http://google.com' }
   let(:valid_params) { { user: valid_attributes, return_url: } }
 
   describe 'POST /users' do
     context 'when valid signup request' do
-      before { post '/users', params: valid_params, headers:, as: :json }
+      subject(:make_request) { post '/users', params: valid_params, as: :json }
 
       it 'creates a new user' do
-        change(User, :count).by(1)
+        expect { make_request }.to change(User, :count).by(1)
       end
 
       it 'returns an authentication token in cookies response' do
+        make_request
         expect(cookies[:auth_token]).not_to be_nil
       end
 
       it 'redirects to return_url in params' do
+        make_request
         expect(response).to have_http_status(:found)
       end
     end
 
     context 'when invalid signup request with missing params' do
-      before { post '/users', params: {}, headers:, as: :json }
+      subject(:make_request) { post '/users', params: {}, as: :json }
 
       it 'responds with Bad Request error' do
+        make_request
         expect(response).to have_http_status(:bad_request)
       end
 
       it 'does not create a new user' do
-        change(User, :count).by(1)
+        expect { make_request }.not_to change(User, :count)
       end
 
       it 'returns nothing in cookies response' do
+        make_request
         expect(cookies[:auth_token]).to be_nil
       end
     end
 
     context 'when already existing user' do
-      let(:user) { create(:user) }
+      subject(:make_request) { post '/users', params: valid_params, as: :json }
 
-      before { post '/users', params: valid_params, headers:, as: :json }
+      before { create(:user) }
 
       it 'responds with Unprocessable Entity error' do
+        make_request
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'does not create a new user' do
-        change(User, :count).by(1)
+        expect { make_request }.not_to change(User, :count)
       end
 
       it 'returns nothing in cookies response' do
+        make_request
         expect(cookies[:auth_token]).to be_nil
+      end
+    end
+  end
+
+  describe 'GET /users/me' do
+    let(:user) { create(:user) }
+
+    context 'when invalid token included' do
+      before { get '/users/me', as: :json }
+
+      it 'responds with Unauthorized error' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when valid token included' do
+      before do
+        configure_auth_cookie(user.id)
+        get '/users/me'
+      end
+
+      it 'responds with success status' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'responds with user attributes' do
+        expect(response.body).to eq user.attributes.to_json
+      end
+    end
+  end
+
+  describe 'PUT /users' do
+    let(:user) { create(:user) }
+
+    context 'when invalid token included' do
+      before { put '/users', as: :json }
+
+      it 'responds with Unauthorized error' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when valid token included' do
+      before do
+        configure_auth_cookie(user.id)
+        put '/users', params: { user: }, as: :json
+      end
+
+      it 'responds with success status' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'responds with user attributes' do
+        expect(response.body).to eq user.attributes.except('id', 'password_digest').to_json
+      end
+    end
+  end
+
+  describe 'DELETE /users' do
+    let(:user) { create(:user) }
+
+    context 'when invalid token included' do
+      before { delete '/users', as: :json }
+
+      it 'responds with Unauthorized error' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when valid token included' do
+      subject(:make_request) do
+        delete '/users'
+      end
+
+      before { configure_auth_cookie(user.id) }
+
+      it 'responds with success status' do
+        make_request
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'destroys user from database' do
+        expect { make_request }.to change(User, :count).by(-1)
+      end
+
+      it 'deletes auth cookie' do
+        make_request
+        expect(cookies[:auth_token]).to eq('')
       end
     end
   end
