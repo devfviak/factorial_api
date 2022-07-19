@@ -11,6 +11,7 @@ RSpec.describe 'Users API', type: :request do
   let(:return_url) { 'http://google.com' }
   let(:valid_params) { { user: valid_attributes, return_url: } }
 
+  # CREATE USER TESTS
   describe 'POST /users' do
     context 'when valid signup request' do
       subject(:make_request) { post '/users', params: valid_params, as: :json }
@@ -69,6 +70,7 @@ RSpec.describe 'Users API', type: :request do
     end
   end
 
+  # FETCH USER TESTS
   describe 'GET /users/me' do
     let(:user) { create(:user) }
 
@@ -91,11 +93,12 @@ RSpec.describe 'Users API', type: :request do
       end
 
       it 'responds with user attributes' do
-        expect(response.body).to eq user.attributes.to_json
+        expect(response.body).to eq UserSerializer.new(user).to_json
       end
     end
   end
 
+  # UPDATE USER TESTS
   describe 'PUT /users' do
     let(:user) { create(:user) }
 
@@ -118,11 +121,12 @@ RSpec.describe 'Users API', type: :request do
       end
 
       it 'responds with user attributes' do
-        expect(response.body).to eq user.attributes.except('id', 'password_digest').to_json
+        expect(response.body).to eq UserSerializer.new(user).to_json
       end
     end
   end
 
+  # DELETE USERS TESTS
   describe 'DELETE /users' do
     let(:user) { create(:user) }
 
