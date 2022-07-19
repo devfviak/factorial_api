@@ -5,6 +5,8 @@ RSpec.describe User, type: :model do
   describe 'validations' do
     subject { create(:user) }
 
+    it_behaves_like 'auditable'
+
     it { is_expected.to validate_presence_of :first_name }
     it { is_expected.to validate_presence_of :last_name }
     it { is_expected.to validate_presence_of :email }
