@@ -4,33 +4,22 @@ module AuthServices
   class RequestAuthenticator < ApplicationService
     include Exceptions
 
-    attr_reader :headers
+    attr_reader :auth_token
 
-    def initialize(headers)
+    def initialize(auth_token)
       super()
-      @headers = headers
+      @auth_token = auth_token
     end
 
     def call
-      token = token_from_headers
-
-      decoded_payload = JsonWebToken.decode(token)
+      decoded_payload = JsonWebToken.decode(auth_token)
       user_id = decoded_payload[:user_id]
 
       User.find(user_id)
     rescue JWT::ExpiredSignature
       raise ExpiredToken
-    rescue JWT::DecodeError, ActiveRecord::RecordNotFound => e
+    rescue JWT::DecodeError, ActiveRecord::RecordNotFound
       raise InvalidToken
-    end
-
-    private
-
-    def token_from_headers
-      token = @headers['Authorization']
-      raise MissingToken unless token
-
-      token
     end
   end
 end

@@ -9,17 +9,7 @@ module RequestHelper
     ::JsonWebToken.encode({ user_id: }, ttl: -1.second)
   end
 
-  def valid_headers
-    {
-      'Authorization' => token_generator(user.id),
-      'Content-Type' => 'application/json'
-    }
-  end
-
-  def invalid_headers
-    {
-      'Authorization' => nil,
-      'Content-Type' => 'application/json'
-    }
+  def configure_auth_cookie(user_id)
+    cookies['auth_token'] = token_generator(user_id)
   end
 end
