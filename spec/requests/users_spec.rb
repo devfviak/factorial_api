@@ -160,4 +160,37 @@ RSpec.describe 'Users API', type: :request do
       end
     end
   end
+
+  # SIGN IN USER REQUEST
+  describe 'POST /users/sign_in' do
+    let(:user) { create(:user) }
+
+    context 'when valid credentials provided' do
+      before do
+        post '/users/sign_in', params: { email: user.email, password: user.password }
+      end
+
+      it 'store aut_token in cookies' do
+        expect(cookies[:auth_token]).not_to be_nil
+      end
+
+      it 'returns a 200 status' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'when invalid credentials provided' do
+      before do
+        post '/users/sign_in', params: { email: user.email, password: "bad_#{user.password}" }
+      end
+
+      it 'does not store aut_token in cookies' do
+        expect(cookies[:auth_token]).to be_nil # TODO: handle invalid token still stored
+      end
+
+      it 'returns Unauthorized status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

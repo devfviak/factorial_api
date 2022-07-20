@@ -13,6 +13,10 @@ RSpec.describe 'routes for Users', type: :routing do
     expect(post('/users')).to route_to('users#create')
   end
 
+  it 'routes POST /users/sign_in to the users controller#sign_in' do
+    expect(post('/users/sign_in')).to route_to('users#sign_in')
+  end
+
   it 'routes PATCH /users to the users controller#update' do
     expect(patch('/users')).to route_to('users#update')
   end
