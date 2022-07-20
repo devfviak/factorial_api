@@ -6,5 +6,6 @@ Rails.application.routes.draw do
 
   resource :users, only: %i[create update destroy] do
     get '/me', to: 'users#show'
+    post '/sign_in', to: 'users#sign_in'
   end
 end

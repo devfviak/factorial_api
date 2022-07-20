@@ -19,6 +19,7 @@ module ExceptionHandler
     rescue_from InvalidToken, with: :unauthorized_response
     rescue_from ExpiredToken, with: :unauthorized_response
     rescue_from MissingToken, with: :unauthorized_response
+    rescue_from InvalidCredentials, with: :unauthorized_response
 
     # Request Parameters related
     rescue_from ActionController::ParameterMissing do |e|

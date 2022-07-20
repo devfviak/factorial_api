@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class UsersController < AuthenticatedController
-  skip_before_action :authenticate_request, only: [:create]
+  include CookieHandler
+
+  skip_before_action :authenticate_request, only: %i[create sign_in]
 
   DEFAULT_RETURN_TO = ENV.fetch('FRONTEND_URL')
 
@@ -13,10 +15,17 @@ class UsersController < AuthenticatedController
   # POST /users
   def create
     user = User.create!(user_params)
-    auth_token = AuthServices::UserAuthenticator.call(user.email, user.password)
+    authenticate_user(user.email, user.password)
 
-    respond_auth_cookie(auth_token)
     redirect_to return_url, allow_other_host: true
+  end
+
+  # POST /users/sign_in
+  def sign_in
+    email, password = params.require(%i[email password])
+    authenticate_user(email, password)
+
+    head :ok
   end
 
   # PUT/PATCH /users
@@ -37,17 +46,12 @@ class UsersController < AuthenticatedController
     params.require(:user).permit(:first_name, :last_name, :email, :password, :phone)
   end
 
-  def return_url
-    params[:return_to_url] || DEFAULT_RETURN_TO
+  def authenticate_user(email, password)
+    auth_token = AuthServices::UserAuthenticator.call(email, password)
+    configure_auth_cookie(auth_token)
   end
 
-  def respond_auth_cookie(auth_token)
-    response.set_cookie(:auth_token,
-                        {
-                          value: auth_token,
-                          expires: Time.zone.now + JsonWebToken::DEFAULT_TTL,
-                          secure: Rails.env.production?,
-                          httponly: true
-                        })
+  def return_url
+    params[:return_to_url] || DEFAULT_RETURN_TO
   end
 end
