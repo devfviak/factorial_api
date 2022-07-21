@@ -8,7 +8,7 @@ module Payments
       #
       # @return [Payments::Items::Payment] payment
       def payment_info(apple_payment)
-        StripeProcessor::Items::Payment.new(apple_payment)
+        ApplePayProcessor::Items::Payment.new(apple_payment)
       end
     end
   end
