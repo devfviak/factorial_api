@@ -28,16 +28,16 @@ class UsersController < AuthenticatedController
     head :ok
   end
 
+  # POST /users/sign_out
+  def sign_out
+    remove_auth_cookie
+    head :ok
+  end
+
   # PUT/PATCH /users
   def update
     @current_user.update!(user_params)
     json_response(@current_user)
-  end
-
-  # DELETE /users
-  def destroy
-    @current_user.destroy!
-    response.set_cookie(:auth_token, { value: '', expires: Time.zone.now - 1 })
   end
 
   private

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resource :users, only: %i[create update destroy] do
     get '/me', to: 'users#show'
     post '/sign_in', to: 'users#sign_in'
+    post '/sign_out', to: 'users#sign_out'
 
     resources :expenses, only: %i[index show update destroy]
   end

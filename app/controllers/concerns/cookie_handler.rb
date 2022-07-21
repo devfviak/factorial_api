@@ -11,4 +11,8 @@ module CookieHandler
                           httponly: true
                         })
   end
+
+  def remove_auth_cookie
+    response.set_cookie(:auth_token, { value: '', expires: Time.zone.now - 1 })
+  end
 end
