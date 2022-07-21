@@ -1,24 +1,56 @@
-# README
+## Welcome
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Hi! I'm Pedro and I've developed this API for learning purposes. The API is a small Ruby on Rails application which lets you:
 
-Things you may want to cover:
+1.  User authentication (sign up, sign in, etc)
+2.  User management (get profile, update it...)
+3.  Add expenses by user
 
-* Ruby version
+It also handles:
 
-* System dependencies
+*   Model validations
+*   Tracking model instaces modifications
+*   Payments webhooks from different payment processors
 
-* Configuration
+And of course. **TESTS**
 
-* Database creation
+## Setup
 
-* Database initialization
+Let's start by setting up the app.  
+  
+Clone the repo
 
-* How to run the test suite
+```plaintext
+git clone git@github.com:devfviak/factorial_api.git
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+  
+Install dependencies
 
-* Deployment instructions
+```sh
+bundle install
+```
 
-* ...
+Make sure you have Mysql installed and create your own _database.yml_ file. (Follow the _database.yml.example_ in the project)
+
+```sh
+touch /config/database.yml
+```
+
+Setup env variables. Create an _.env_ file in project root folder with the following content:   
+ 
+
+```plaintext
+DB_USERNAME='your_mysql_db_user'
+DB_PASSWORD='your_mysql_db_passwrd'
+
+API_URL='http://localhost:3000'
+FRONTEND_URL = 'http://localhost:5173'
+```
+
+## Run it
+Once setup is done, you can start the server
+
+```sh
+rails s
+```
