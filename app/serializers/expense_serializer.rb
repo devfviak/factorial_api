@@ -16,7 +16,8 @@
 #  updated_at     :datetime         not null
 #
 class ExpenseSerializer < ActiveModel::Serializer
-  attributes :id, :concept, :total, :subtotal, :currency, :timestamp, :processor
+  attributes :id, :concept, :total, :subtotal, :currency, :processor,
+             :timestamp, :year, :month, :day
 
   def total
     object.total_cents.to_f / 100
@@ -26,7 +27,19 @@ class ExpenseSerializer < ActiveModel::Serializer
     object.subtotal_cents.to_f / 100
   end
 
+  def year
+    object.created_at.year
+  end
+
+  def month
+    object.created_at.month
+  end
+
+  def day
+    object.created_at.day
+  end
+
   def timestamp
-    object.created_at.to_s
+    object.created_at.to_i
   end
 end
