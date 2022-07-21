@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_19_102300) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_21_005308) do
   create_table "audit_logs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "action", null: false
     t.json "audit_changes"
@@ -19,6 +19,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_19_102300) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["auditable_type", "auditable_id"], name: "index_audit_logs_on_auditable"
+  end
+
+  create_table "expenses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "concept", null: false
+    t.decimal "subtotal_cents", precision: 10, null: false
+    t.decimal "total_cents", precision: 10, null: false
+    t.string "currency", null: false
+    t.string "processor", null: false
+    t.json "processor_info"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_expenses_on_user_id"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
