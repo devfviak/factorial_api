@@ -48,6 +48,11 @@ API_URL='http://localhost:3000'
 FRONTEND_URL = 'http://localhost:5173'
 ```
 
+### Setup database
+```sh
+rails db:setup
+```
+
 ## Run it
 Once setup is done, you can start the server
 
