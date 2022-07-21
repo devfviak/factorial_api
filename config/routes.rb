@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -7,5 +9,7 @@ Rails.application.routes.draw do
   resource :users, only: %i[create update destroy] do
     get '/me', to: 'users#show'
     post '/sign_in', to: 'users#sign_in'
+
+    resources :expenses, only: %i[index show update destroy]
   end
 end
