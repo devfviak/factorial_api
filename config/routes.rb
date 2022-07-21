@@ -12,4 +12,9 @@ Rails.application.routes.draw do
 
     resources :expenses, only: %i[index show update destroy]
   end
+
+  namespace :stripe do
+    post '/payments/checkout_completed', to: 'payments#checkout_completed'
+    post '/mock/checkout_completed', to: 'mock#checkout_completed'
+  end
 end
