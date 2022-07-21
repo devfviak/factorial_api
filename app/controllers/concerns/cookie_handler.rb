@@ -7,6 +7,7 @@ module CookieHandler
                           value: auth_token,
                           expires: Time.zone.now + JsonWebToken::DEFAULT_TTL,
                           secure: Rails.env.production?,
+                          path: '/',
                           httponly: true
                         })
   end
