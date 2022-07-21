@@ -17,4 +17,9 @@ Rails.application.routes.draw do
     post '/payments/checkout_completed', to: 'payments#checkout_completed'
     post '/mock/checkout_completed', to: 'mock#checkout_completed'
   end
+
+  namespace :apple_pay do
+    post '/payments/payment_completed', to: 'payments#payment_completed'
+    post '/mock/payment_completed', to: 'mock#payment_completed'
+  end
 end
