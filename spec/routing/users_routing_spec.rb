@@ -25,7 +25,7 @@ RSpec.describe 'routes for Users', type: :routing do
     expect(put('/users')).to route_to('users#update')
   end
 
-  it 'routes DELETE /users to the users controller#destroy' do
-    expect(delete('/users')).to route_to('users#destroy')
+  it 'routes POST /users/sign_out to the users controller#sign_out' do
+    expect(post('/users/sign_out')).to route_to('users#sign_out')
   end
 end

@@ -126,12 +126,12 @@ RSpec.describe 'Users API', type: :request do
     end
   end
 
-  # DELETE USERS TESTS
-  describe 'DELETE /users' do
+  # SIGN OUT USERS TESTS
+  describe 'POST /users/sign_out' do
     let(:user) { create(:user) }
 
     context 'when invalid token included' do
-      before { delete '/users', as: :json }
+      before { post '/users/sign_out', as: :json }
 
       it 'responds with Unauthorized error' do
         expect(response).to have_http_status(:unauthorized)
@@ -140,7 +140,7 @@ RSpec.describe 'Users API', type: :request do
 
     context 'when valid token included' do
       subject(:make_request) do
-        delete '/users'
+        post '/users/sign_out'
       end
 
       before { configure_auth_cookie(user.id) }
@@ -150,13 +150,9 @@ RSpec.describe 'Users API', type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it 'destroys user from database' do
-        expect { make_request }.to change(User, :count).by(-1)
-      end
-
       it 'deletes auth cookie' do
         make_request
-        expect(cookies[:auth_token]).to eq('')
+        expect(response.cookies[:auth_token]).to be_nil
       end
     end
   end
