@@ -5,8 +5,6 @@ class UsersController < AuthenticatedController
 
   skip_before_action :authenticate_request, only: %i[create sign_in]
 
-  DEFAULT_RETURN_TO = ENV.fetch('FRONTEND_URL')
-
   # GET /users/me
   def show
     json_response(@current_user)
@@ -17,7 +15,7 @@ class UsersController < AuthenticatedController
     user = User.create!(user_params)
     authenticate_user(user.email, user.password)
 
-    redirect_to return_url, allow_other_host: true
+    head :ok
   end
 
   # POST /users/sign_in
