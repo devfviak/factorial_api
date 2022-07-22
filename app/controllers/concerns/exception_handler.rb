@@ -12,7 +12,7 @@ module ExceptionHandler
     end
 
     rescue_from ActiveRecord::RecordInvalid do |e|
-      json_response({ error: e.message }, :unprocessable_entity)
+      json_response({ errors: e.record.errors }, :unprocessable_entity)
     end
 
     # Authentication related
