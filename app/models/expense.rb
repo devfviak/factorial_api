@@ -16,5 +16,10 @@
 #  updated_at     :datetime         not null
 #
 class Expense < ApplicationRecord
+  include Auditable
+
   belongs_to :user
+
+  validates :concept, :subtotal_cents, :total_cents, :currency, :processor, presence: true
+  validates :concept, length: { in: 0..50 }
 end
