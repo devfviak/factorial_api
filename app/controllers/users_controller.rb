@@ -38,6 +38,11 @@ class UsersController < AuthenticatedController
     json_response(@current_user)
   end
 
+  # GET /users/audit_logs
+  def audit_logs
+    json_response(@current_user.audit_logs)
+  end
+
   private
 
   def user_params

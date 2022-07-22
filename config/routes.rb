@@ -10,8 +10,11 @@ Rails.application.routes.draw do
     get '/me', to: 'users#show'
     post '/sign_in', to: 'users#sign_in'
     post '/sign_out', to: 'users#sign_out'
+    get '/audit_logs', to: 'users#audit_logs'
 
-    resources :expenses, only: %i[index show update destroy]
+    resources :expenses, only: %i[index show update destroy] do
+      get '/audit_logs', to: 'expenses#audit_logs'
+    end
   end
 
   namespace :stripe do
