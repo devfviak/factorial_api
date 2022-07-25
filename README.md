@@ -12,6 +12,11 @@ It also handles:
 *   Tracking model instaces modifications
 *   Payments webhooks from different payment processors
 
+TODOs:
+
+*   Add Apipie for endpoints documentation
+*   Add rake task to build openapi.yml from Apipie integration
+
 And of course. **TESTS**
 
 ## Setup
